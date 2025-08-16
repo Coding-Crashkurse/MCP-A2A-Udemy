@@ -47,7 +47,12 @@ def add(a: int, b: int) -> int:
 
     async with client:
         result = await client.call_tool("generate_docstring", {"code": code_snippet})
-        print("Generated Docstring:\n", result[0].text)
+
+        # pre-v2.10: result was a list of Content objects, so we accessed the first item.
+        # print("Generated Docstring:\n", result[0].text)
+        
+        # v2.10+: result is a single CallToolResult object.
+        print("Generated Docstring:\n", result.data)
 
 
 if __name__ == "__main__":

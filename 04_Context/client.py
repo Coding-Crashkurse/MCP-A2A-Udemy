@@ -22,7 +22,7 @@ async def log_handler(params: LogMessage):
 
 
 async def main():
-    transport = StreamableHttpTransport(url="http://127.0.0.1:8000/mcp/")
+    transport = StreamableHttpTransport(url="http://127.0.0.1:8000/mcp")
     client = Client(transport, message_handler=message_handler, log_handler=log_handler)
 
     async with client:
@@ -32,7 +32,13 @@ async def main():
         print("→ Calling process_items…")
         items = ["one", "two", "three", "four", "five"]
         result = await client.call_tool("process_items", {"items": items})
-        processed = [c.text for c in result]
+        print("RESULT", result)
+
+        # pre-v2.10: result was a list of Content objects, requiring a list comprehension.
+        # processed = [c.text for c in result]
+        
+        # v2.10+: result is a single CallToolResult object.
+        processed = result.data
         print("→ Result:", processed)
 
 

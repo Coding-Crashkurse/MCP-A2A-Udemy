@@ -44,7 +44,12 @@ async def main():
     client = Client(transport)
     async with client:
         result = await client.call_tool("add", {"a": 5, "b": 7})
-        print("5 + 7 =", result[0].text)
+
+        # pre-v2.10: result was a list of Content objects, so we accessed the first item.
+        # print("5 + 7 =", result[0].text)
+
+        # v2.10+: result is a single CallToolResult object.
+        print("5 + 7 =", result.data)
 
 
 if __name__ == "__main__":
