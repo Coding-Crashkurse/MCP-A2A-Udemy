@@ -34,7 +34,10 @@ async def main() -> None:
             create_tool_name,
             {"name": "Widget", "price": 19.99},
         )
-        print("Created product:", created[0].text)
+        # pre-v2.10: result was a list of Content objects
+        # print("Created product:", created[0].text)
+        # v2.10+: result is a single CallToolResult object
+        print("Created product:", created.data)
 
         updated_products = await session.read_resource(list_uri)
         section("All Products (After)")
