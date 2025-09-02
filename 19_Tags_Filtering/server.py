@@ -1,26 +1,30 @@
 from fastmcp import FastMCP
 
-mcp = FastMCP(name="TagServerBasic")
+mcp = FastMCP(name="TagFilterDemo")
 
-@mcp.tool(meta={"tags": ["public"]}, description="Add for public")
+@mcp.tool(tags={"math"})
 def add(a: int, b: int) -> int:
     return a + b
 
-@mcp.tool(meta={"tags": ["admin"]}, description="Do top secret stuff")
-def do_top_secret_stuff() -> str:
-    return "classified operation complete"
+@mcp.tool(tags={"math"})
+def subtract(a: int, b: int) -> int:
+    return a - b
 
-@mcp.tool(description="Switch visible set: public | admin")
-def set_mode(mode: str = "public") -> dict:
-    groups = {
-        "public": [add],
-        "admin":  [do_top_secret_stuff],
+@mcp.tool(tags={"search"})
+def search(item: str):
+    db1 = {
+        "iphone_15_pro_128gb": {"name": "Apple iPhone 15 Pro (128GB)", "price_usd": 999},
+        "ps5_slim": {"name": "Sony PlayStation 5 Slim", "price_usd": 499},
     }
-    for t in {add, do_top_secret_stuff}:
-        t.disable()
-    for t in groups.get(mode, []):
-        t.enable()
-    return {"mode": mode, "enabled": [t.name for t in groups.get(mode, [])]}
+    return db1.get(item) or "Item nicht gefunden"
+
+@mcp.tool(tags={"search"})
+def search_suggest(item: str):
+    db2 = {
+        "switch_oled": {"name": "Nintendo Switch OLED", "price_usd": 349},
+        "galaxy_s24_ultra_256gb": {"name": "Samsung Galaxy S24 Ultra (256GB)", "price_usd": 1299},
+    }
+    return db2.get(item) or "Item nicht gefunden"
 
 if __name__ == "__main__":
-    mcp.run(transport="http", host="127.0.0.1", port=8020, path="/mcp/")
+    mcp.run(transport="http", host="127.0.0.1", port=8052, path="/mcp/")
