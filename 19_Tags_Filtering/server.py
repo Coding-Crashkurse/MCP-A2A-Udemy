@@ -1,16 +1,19 @@
 from fastmcp import FastMCP
 
-mcp = FastMCP(name="TagFilterDemo")
+mcp = FastMCP(
+    name="TagFilterDemo",
+    include_fastmcp_meta=True,  # liefert _fastmcp.tags an den Client
+)
 
-@mcp.tool(tags={"math"})
+@mcp.tool(tags={"math"}, meta={"domain": "math", "ops": "pure"})
 def add(a: int, b: int) -> int:
     return a + b
 
-@mcp.tool(tags={"math"})
+@mcp.tool(tags={"math"}, meta={"domain": "math", "ops": "pure"})
 def subtract(a: int, b: int) -> int:
     return a - b
 
-@mcp.tool(tags={"search"})
+@mcp.tool(tags={"search"}, meta={"domain": "catalog", "source": "db1", "region": "US"})
 def search(item: str):
     db1 = {
         "iphone_15_pro_128gb": {"name": "Apple iPhone 15 Pro (128GB)", "price_usd": 999},
@@ -18,7 +21,7 @@ def search(item: str):
     }
     return db1.get(item) or "Item nicht gefunden"
 
-@mcp.tool(tags={"search"})
+@mcp.tool(tags={"search"}, meta={"domain": "catalog", "source": "db2", "region": "US"})
 def search_suggest(item: str):
     db2 = {
         "switch_oled": {"name": "Nintendo Switch OLED", "price_usd": 349},
