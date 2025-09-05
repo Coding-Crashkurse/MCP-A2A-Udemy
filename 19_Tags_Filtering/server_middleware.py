@@ -1,9 +1,22 @@
 from fastmcp import FastMCP
+from fastmcp.server.middleware import Middleware, MiddlewareContext
 
-mcp = FastMCP(
-    name="TagFilterDemo",
-    include_fastmcp_meta=True,
-)
+mcp = FastMCP(name="TagFilterDemo", include_fastmcp_meta=True)
+
+class TagFilteringMiddleware(Middleware):
+    async def on_list_tools(self, context: MiddlewareContext, call_next):
+        result = await call_next(context)
+        qp = context.fastmcp_context.request_context.request.query_params
+        tags = qp.getlist("tags")
+        if not tags:
+            return result
+        if len(tags) == 1 and "," in tags[0]:
+            tags = {s.strip() for s in tags[0].split(",") if s.strip()}
+        else:
+            tags = set(tags)
+        return [tool for tool in result if set(tool.tags) & tags]
+
+mcp.add_middleware(TagFilteringMiddleware())
 
 @mcp.tool(tags={"math"}, meta={"domain": "math", "ops": "pure"})
 def add(a: int, b: int) -> int:
@@ -28,6 +41,8 @@ def search_suggest(item: str):
         "galaxy_s24_ultra_256gb": {"name": "Samsung Galaxy S24 Ultra (256GB)", "price_usd": 1299},
     }
     return db2.get(item) or "Item nicht gefunden"
+
+mp = mcp.http_app(path="/mcp/")
 
 if __name__ == "__main__":
     mcp.run(transport="http", host="127.0.0.1", port=8052, path="/mcp/")
