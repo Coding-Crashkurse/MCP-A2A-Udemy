@@ -46,8 +46,27 @@ Proxies that bridge legacy SSE traffic to the new *streamable-http* method, whil
 **13_Capstone**  
 A full-stack, Docker-based AI web application (frontend + API server + MCP server) that ties together everything you’ve learned.
 
-**14_A2A** 🚧  
-*Under construction – stay tuned!*
+## 14_Env_ToolFlags
+Env-driven tool enabling with `.env` flags (`MCP_TOOL_ADD`, `MCP_TOOL_SUBTRACT`). The client lists tools over HTTP. Focus: feature toggles without middleware or tags.
+
+## 15_StructuredOutputs
+Shows structured tool outputs using MCP output schemas (2025-06-18) in FastMCP >= 2.10.0, returning a `CallToolResult` with auto-deserialized JSON.
+
+## 16_Elicitation
+Demonstrates elicitation per the 2025-06-18 MCP update in FastMCP >= 2.10.0 where the server requests extra input and the client supplies it, including implicit and no-response flows.
+
+## 17_Context_State
+Uses `Context.session_id` for per-session state plus `report_progress` and logging. Compatible with FastMCP 2.9.x and 2.10.x.
+
+## 18_Middleware
+Intercepts `list_tools` and `call_tool` with MCP middleware for auth, logging, rate limiting, and error handling introduced in 2.9.0.
+
+## 19_DeclarativeJSON
+Configures servers declaratively via `fastmcp.json`, using the CLI MCP-JSON export added in 2.10.3.
+
+## 20_Tags_Filtering
+Filters tools by query `?tags=...` in a `list_tools` middleware against `component.tags`. Requires `/mcp/` trailing slash since 2.10.0 and uses the list-result type fix in 2.10.5.
+
 
 ---
 
