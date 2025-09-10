@@ -1,4 +1,3 @@
-import asyncio
 from fastmcp import FastMCP, Context
 from fastmcp.server.elicitation import AcceptedElicitation
 
@@ -6,13 +5,11 @@ mcp = FastMCP(name="ElicitationServer")
 
 @mcp.tool(description="Add two integers after explicit confirmation.")
 async def add_with_confirmation(a: int, b: int, ctx: Context) -> int:
-    prompt = f"Are you sure you want to add {a} and {b}? (yes/no)"
-    resp = await ctx.elicit(message=prompt, response_type=str)
-
-    if isinstance(resp, AcceptedElicitation) and str(resp.data).strip().lower() in {"yes", "y"}:
+    resp = await ctx.elicit(message=f"Type 'yes' to add {a} and {b}.", response_type=str)
+    if isinstance(resp, AcceptedElicitation):
         await ctx.info("Confirmed by user.")
         return a + b
-    await ctx.info("Cancelled by user.")
+    await ctx.info("Declined by user.")
     return 0
 
 if __name__ == "__main__":
