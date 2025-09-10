@@ -16,4 +16,4 @@ async def add_with_confirmation(a: int, b: int, ctx: Context) -> int:
     return 0
 
 if __name__ == "__main__":
-    mcp.run(transport="http", host="127.0.0.1", port=8015, path="/mcp/")
+    mcp.run(transport="streamable-http", host="127.0.0.1")
