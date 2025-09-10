@@ -13,4 +13,4 @@ def add(a: int, b: int) -> AddResult:
     return AddResult(input_a=a, input_b=b, result=a + b)
 
 if __name__ == "__main__":
-    mcp.run(transport="http", host="127.0.0.1", port=8014, path="/mcp/")
+    mcp.run(transport="http", host="127.0.0.1")
