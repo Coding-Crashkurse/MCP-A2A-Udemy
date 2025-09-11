@@ -8,7 +8,7 @@ NOTES = defaultdict(list)
 class AuthMiddleware(Middleware):
     async def on_call_tool(self, context: MiddlewareContext, call_next):
         context.fastmcp_context.set_state("current_user", {"name": "Admin"})
-        return await call_next()
+        return await call_next(context)
 
 mcp.add_middleware(AuthMiddleware())
 
@@ -16,8 +16,9 @@ mcp.add_middleware(AuthMiddleware())
 def create_note(text: str, ctx: Context) -> dict:
     user = ctx.get_state("current_user") or {}
     name = user.get("name", "anonymous")
-    if name == "Admin":
-        return {"ok": False, "error": "Admin ist read-only"}
+    print("NAME", name)
+    if name != "Admin":
+        return {"ok": False, "error": "Only Admin may create notes"}
     NOTES[name].append(text)
     return {"ok": True, "note": text, "total": len(NOTES[name])}
 
