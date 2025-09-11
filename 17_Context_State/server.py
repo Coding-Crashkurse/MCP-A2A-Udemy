@@ -17,4 +17,4 @@ def reset_counter(ctx: Context) -> int:
     return 0
 
 if __name__ == "__main__":
-    mcp.run(transport="http", host="127.0.0.1", port=8016, path="/mcp/")
+    mcp.run(transport="http", host="127.0.0.1")

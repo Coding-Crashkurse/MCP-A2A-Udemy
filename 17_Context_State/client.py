@@ -3,7 +3,7 @@ from fastmcp import Client
 from fastmcp.client.transports import StreamableHttpTransport
 
 async def main():
-    client = Client(StreamableHttpTransport("http://127.0.0.1:8016/mcp/"))
+    client = Client(StreamableHttpTransport("http://127.0.0.1:8000/mcp/"))
     async with client:
         for i in range(3):
             res = await client.call_tool("increment_counter", {})
