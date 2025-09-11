@@ -2,18 +2,19 @@ from fastmcp import FastMCP, Context
 
 mcp = FastMCP(
     name="ContextStateServer",
-    stateless_http=False,  # nötig für ctx.state
+    stateless_http=False,
 )
 
 @mcp.tool(description="Increment session counter and return new value.")
 def increment_counter(ctx: Context) -> int:
-    v = ctx.state.get("counter", 0) + 1
-    ctx.state["counter"] = v
-    return v
+    current = ctx.get_state("counter") or 0
+    new_val = int(current) + 1
+    ctx.set_state("counter", new_val)
+    return new_val
 
 @mcp.tool(description="Reset session counter to zero.")
 def reset_counter(ctx: Context) -> int:
-    ctx.state["counter"] = 0
+    ctx.set_state("counter", 0)
     return 0
 
 if __name__ == "__main__":
