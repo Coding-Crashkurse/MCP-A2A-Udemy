@@ -16,7 +16,6 @@ mcp.add_middleware(AuthMiddleware())
 def create_note(text: str, ctx: Context) -> dict:
     user = ctx.get_state("current_user") or {}
     name = user.get("name", "anonymous")
-    print("NAME", name)
     if name != "Admin":
         return {"ok": False, "error": "Only Admin may create notes"}
     NOTES[name].append(text)
