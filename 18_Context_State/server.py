@@ -1,21 +1,31 @@
+from collections import defaultdict
 from fastmcp import FastMCP, Context
+from fastmcp.server.middleware import Middleware, MiddlewareContext
 
-mcp = FastMCP(
-    name="ContextStateServer",
-    stateless_http=False,
-)
+mcp = FastMCP(name="ContextStateDemo")
+NOTES = defaultdict(list)
 
-@mcp.tool(description="Increment session counter and return new value.")
-def increment_counter(ctx: Context) -> int:
-    current = ctx.get_state("counter") or 0
-    new_val = int(current) + 1
-    ctx.set_state("counter", new_val)
-    return new_val
+class AuthMiddleware(Middleware):
+    async def on_call_tool(self, context: MiddlewareContext, call_next):
+        context.fastmcp_context.set_state("current_user", {"name": "Admin"})
+        return await call_next()
 
-@mcp.tool(description="Reset session counter to zero.")
-def reset_counter(ctx: Context) -> int:
-    ctx.set_state("counter", 0)
-    return 0
+mcp.add_middleware(AuthMiddleware())
+
+@mcp.tool
+def create_note(text: str, ctx: Context) -> dict:
+    user = ctx.get_state("current_user") or {}
+    name = user.get("name", "anonymous")
+    if name == "Admin":
+        return {"ok": False, "error": "Admin ist read-only"}
+    NOTES[name].append(text)
+    return {"ok": True, "note": text, "total": len(NOTES[name])}
+
+@mcp.tool
+def list_notes(ctx: Context) -> dict:
+    user = ctx.get_state("current_user") or {}
+    name = user.get("name", "anonymous")
+    return {"ok": True, "user": name, "notes": list(NOTES.get(name, []))}
 
 if __name__ == "__main__":
-    mcp.run(transport="http", host="127.0.0.1")
+    mcp.run(transport="http", host="127.0.0.1", port=8000)
