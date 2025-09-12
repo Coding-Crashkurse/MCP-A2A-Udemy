@@ -5,16 +5,13 @@ mcp = FastMCP(name="TagFilterDemo")
 
 class TagFilteringMiddleware(Middleware):
     async def on_list_tools(self, context: MiddlewareContext, call_next):
-        result = await call_next(context)
+        tools = await call_next(context)
         qp = context.fastmcp_context.request_context.request.query_params
-        tags = qp.getlist("tags")
-        if not tags:
-            return result
-        if len(tags) == 1 and "," in tags[0]:
-            tags = {s.strip() for s in tags[0].split(",") if s.strip()}
-        else:
-            tags = set(tags)
-        return [tool for tool in result if set(tool.tags) & tags]
+        q = qp.get("tags")
+        if not q:
+            return tools
+        tags = {t.strip() for t in q.split(",") if t.strip()}
+        return [t for t in tools if tags & t.tags]
 
 mcp.add_middleware(TagFilteringMiddleware())
 

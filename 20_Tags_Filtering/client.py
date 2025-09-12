@@ -3,7 +3,7 @@ from fastmcp import Client
 from fastmcp.client.transports import StreamableHttpTransport
 
 async def main():
-    c1 = Client(StreamableHttpTransport("http://localhost:8000/mcp/?tags=math"))
+    c1 = Client(StreamableHttpTransport("http://localhost:8000/mcp/"))
     async with c1:
         tools = await c1.list_tools()
         print("http://localhost:8000/mcp/?tags=math")

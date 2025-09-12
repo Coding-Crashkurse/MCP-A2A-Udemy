@@ -53,11 +53,11 @@ Structured tool outputs using MCP output schemas (2025-06-18) in FastMCP >= 2.10
 ## 16_Elicitation
 Elicitation per the 2025-06-18 MCP update in FastMCP >= 2.10.0. The server requests extra input and the client supplies it, including implicit and no-response flows.
 
-## 17_Context_State
-Uses `Context.session_id` for per-session state plus `report_progress` and logging. Compatible with FastMCP 2.9.x and 2.10.x.
-
-## 18_Middleware
+## 17_Middleware
 Intercepts `list_tools` and `call_tool` with MCP middleware for auth, logging, rate limiting, and error handling introduced in 2.9.0.
+
+## 18_Context_State
+Uses `Context.session_id` for per-session state plus `report_progress` and logging. Compatible with FastMCP 2.9.x and 2.10.x.
 
 ## 19_DeclarativeJSON
 Declarative server configuration via `fastmcp.json`. Uses the MCP-JSON CLI export added in 2.10.3.
