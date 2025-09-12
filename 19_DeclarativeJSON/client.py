@@ -7,8 +7,6 @@ async def main():
     async with client:
         res = await client.call_tool("add", {"a": 2, "b": 3})
         print("add:", res.data)
-        pong = await client.call_tool("ping", {})
-        print("ping:", pong.data)
 
 if __name__ == "__main__":
     asyncio.run(main())

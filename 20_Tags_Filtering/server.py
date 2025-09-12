@@ -1,33 +1,34 @@
 from fastmcp import FastMCP
+from fastmcp.server.middleware import Middleware, MiddlewareContext
 
-mcp = FastMCP(
-    name="TagFilterDemo",
-    include_fastmcp_meta=True,
-)
+mcp = FastMCP(name="TagFilterDemo")
 
-@mcp.tool(tags={"math"}, meta={"domain": "math", "ops": "pure"})
+class TagFilteringMiddleware(Middleware):
+    async def on_list_tools(self, context: MiddlewareContext, call_next):
+        result = await call_next(context)
+        qp = context.fastmcp_context.request_context.request.query_params
+        tags = qp.getlist("tags")
+        if not tags:
+            return result
+        if len(tags) == 1 and "," in tags[0]:
+            tags = {s.strip() for s in tags[0].split(",") if s.strip()}
+        else:
+            tags = set(tags)
+        return [tool for tool in result if set(tool.tags) & tags]
+
+mcp.add_middleware(TagFilteringMiddleware())
+
+@mcp.tool(tags={"math"})
 def add(a: int, b: int) -> int:
     return a + b
 
-@mcp.tool(tags={"math"}, meta={"domain": "math", "ops": "pure"})
-def subtract(a: int, b: int) -> int:
-    return a - b
-
-@mcp.tool(tags={"search"}, meta={"domain": "catalog", "source": "db1", "region": "US"})
+@mcp.tool(tags={"search"})
 def search(item: str):
     db1 = {
         "iphone_15_pro_128gb": {"name": "Apple iPhone 15 Pro (128GB)", "price_usd": 999},
         "ps5_slim": {"name": "Sony PlayStation 5 Slim", "price_usd": 499},
     }
-    return db1.get(item) or "Item nicht gefunden"
-
-@mcp.tool(tags={"search"}, meta={"domain": "catalog", "source": "db2", "region": "US"})
-def search_suggest(item: str):
-    db2 = {
-        "switch_oled": {"name": "Nintendo Switch OLED", "price_usd": 349},
-        "galaxy_s24_ultra_256gb": {"name": "Samsung Galaxy S24 Ultra (256GB)", "price_usd": 1299},
-    }
-    return db2.get(item) or "Item nicht gefunden"
+    return db1.get(item) or "Item not found"
 
 if __name__ == "__main__":
-    mcp.run(transport="http", host="127.0.0.1", port=8052, path="/mcp/")
+    mcp.run(transport="http", host="127.0.0.1")
