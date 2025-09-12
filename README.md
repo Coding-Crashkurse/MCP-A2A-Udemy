@@ -57,13 +57,13 @@ Elicitation per the 2025-06-18 MCP update in FastMCP >= 2.10.0. The server reque
 Intercepts `list_tools` and `call_tool` with MCP middleware for auth, logging, rate limiting, and error handling introduced in 2.9.0.
 
 ## 18_Context_State
-Uses `Context.session_id` for per-session state plus `report_progress` and logging. Compatible with FastMCP 2.9.x and 2.10.x.
+Uses `Context.session_id` for per-session state plus `report_progress` and logging. Compatible with FastMCP >=2.9.x
 
 ## 19_DeclarativeJSON
 Declarative server configuration via `fastmcp.json`. Uses the MCP-JSON CLI export added in 2.10.3.
 
 ## 20_Tags_Filtering
-Filters tools by query `?tags=...` in a `list_tools` middleware against `component.tags`. Requires `/mcp/` trailing slash since 2.10.0 and uses the list-result type fix in 2.10.5.
+Filters tools by query `?tags=...` in a `list_tools` middleware against `component.tags`.
 
 ---
 
