@@ -7,7 +7,7 @@ NOTES = defaultdict(list)
 
 class AuthMiddleware(Middleware):
     async def on_call_tool(self, context: MiddlewareContext, call_next):
-        context.fastmcp_context.set_state("current_user", {"name": "Admin"})
+        context.fastmcp_context.set_state("current_user", {"name": "sdasd"})
         return await call_next(context)
 
 mcp.add_middleware(AuthMiddleware())
