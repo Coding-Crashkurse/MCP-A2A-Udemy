@@ -5,6 +5,14 @@
     "path": "server.py",
     "entrypoint": "mcp"
   },
+  "environment": {
+    "type": "uv",
+    "python": ">=3.11",
+    "dependencies": [
+      "fastmcp>=2.12",
+      "pydantic>=2.7"
+    ]
+  },
   "deployment": {
     "transport": "http",
     "host": "127.0.0.1",
