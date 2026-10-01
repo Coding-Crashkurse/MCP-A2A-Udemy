@@ -5,7 +5,7 @@ WORKDIR /app
 COPY .env furniture_server.py /app/
 
 RUN pip install --no-cache-dir \
-    fastmcp \
+    "fastmcp<4" \
     python-jose[cryptography] \
     httpx \
     python-dotenv

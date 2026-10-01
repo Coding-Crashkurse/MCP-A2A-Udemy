@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir \
     langchain-openai \
     langchain-mcp-adapters \
     langgraph \
-    mcp \
+    "mcp<2" \
     httpx \
     python-dotenv
 

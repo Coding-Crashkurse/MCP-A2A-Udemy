@@ -9,7 +9,7 @@
     "type": "uv",
     "python": ">=3.11",
     "dependencies": [
-      "fastmcp>=2.12",
+      "fastmcp>=2.12,<4",
       "pydantic>=2.7"
     ]
   },

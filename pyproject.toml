@@ -6,13 +6,14 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.116.1",
-    "fastmcp>=3.0.2",
+    "fastmcp>=3.0.2,<4",
     "ipykernel>=6.29.5",
     "langchain>=0.3.25",
     "langchain-core>=0.3.60",
     "langchain-mcp-adapters>=0.1.1",
     "langchain-openai>=0.3.17",
     "langgraph>=0.4.5",
+    "mcp>=1.26,<2",
     "python-jose>=3.4.0",
     "ruff>=0.11.10",
     "uvicorn>=0.34.2",
